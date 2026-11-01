@@ -1,0 +1,123 @@
+-- 1. Create Database
+CREATE DATABASE COMPANY;
+
+-- 2. Use Database
+USE COMPANY;
+
+-- 3. Create Employee Table
+CREATE TABLE EMPLOYEE (
+    Emp_no INT PRIMARY KEY,
+    E_name VARCHAR(50),
+    E_address VARCHAR(100),
+    E_ph_no VARCHAR(15),
+    Dept_no INT,
+    Dept_name VARCHAR(50),
+    Job_id CHAR(10),
+    Salary DECIMAL(10,2)
+);
+
+-- 4. Add New Column
+ALTER TABLE EMPLOYEE ADD HIREDATE DATE;
+
+-- 5. Modify Job_id Datatype
+ALTER TABLE EMPLOYEE MODIFY Job_id VARCHAR(10);
+
+-- 6. Rename Column
+ALTER TABLE EMPLOYEE
+RENAME COLUMN Emp_no TO E_no;
+
+-- 7. Modify Column Width
+ALTER TABLE EMPLOYEE MODIFY Job_id VARCHAR(20);
+
+-- 8. Add Unique Constraint
+ALTER TABLE EMPLOYEE
+ADD CONSTRAINT UQ_E_ph_no UNIQUE (E_ph_no);
+
+-- 9. Add Not Null Constraint
+ALTER TABLE EMPLOYEE
+MODIFY E_name VARCHAR(50) NOT NULL;
+
+-- 10. Add Check Constraint
+ALTER TABLE EMPLOYEE
+ADD CONSTRAINT CHK_Salary CHECK (Salary > 0);
+
+-- 11. Insert Records
+INSERT INTO EMPLOYEE
+(E_no, E_name, E_address, E_ph_no, Dept_no,
+Dept_name, Job_id, Salary, HIREDATE)
+VALUES
+(1, 'John Doe', '123 Main St', '555-1234',
+101, 'Sales', 'J1001', 50000.00, '2024-08-20');
+
+INSERT INTO EMPLOYEE
+(E_no, E_name, E_address, E_ph_no, Dept_no,
+Dept_name, Job_id, Salary, HIREDATE)
+VALUES
+(2, 'Jane Smith', '456 Oak St', '555-5678',
+102, 'Marketing', 'J1002', 60000.00, '2018-06-04');
+
+INSERT INTO EMPLOYEE
+(E_no, E_name, E_address, E_ph_no, Dept_no,
+Dept_name, Job_id, Salary, HIREDATE)
+VALUES
+(3, 'Alice Johnson', '789 Pine St', '555-9012',
+103, 'HR', 'J1003', 55000.00, '2015-07-04');
+
+INSERT INTO EMPLOYEE
+(E_no, E_name, E_address, E_ph_no, Dept_no,
+Dept_name, Job_id, Salary, HIREDATE)
+VALUES
+(4, 'Alice Bob', '112 Apple St', '555-1112',
+104, 'ADMIN', 'J1004', 45000.00, '2015-03-04');
+
+-- Display Records
+SELECT * FROM EMPLOYEE;
+
+-- 12. Update Records
+UPDATE EMPLOYEE
+SET Salary = 55000.00
+WHERE E_no = 1;
+
+UPDATE EMPLOYEE
+SET Dept_name = 'Digital Marketing'
+WHERE Dept_no = 102;
+
+SELECT * FROM EMPLOYEE;
+
+-- 13. Delete Records
+DELETE FROM EMPLOYEE WHERE E_no = 3;
+
+DELETE FROM EMPLOYEE WHERE Dept_no = 101;
+
+SELECT * FROM EMPLOYEE;
+
+-- 14. Truncate Table
+TRUNCATE TABLE EMPLOYEE;
+
+SELECT * FROM EMPLOYEE;
+
+1
+Query OK, 1 row affected
+Database changed
+2
+Query OK, 0 rows affected
+3
+Query OK, 0 rows affected
+4
+Query OK, 1 row affected
+Query OK, 1 row affected
+Query OK, 1 row affected
+Query OK, 1 row affected
+5Query OK, 1 row affected
+Query OK, 1 row affected
+5
+Query OK, 1 row affected
+Query OK, 1 row affected
+6
+Query OK, 1 row affected
+Query OK, 1 row affected
+7
+Query OK, 0 rows affected
+
+mysql> SELECT * FROM EMPLOYEE;
+Empty set
