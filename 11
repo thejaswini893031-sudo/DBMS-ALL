@@ -1,0 +1,111 @@
+CREATE DATABASE SecurityDB1;
+CREATE DATABASE SecurityDB2;
+USE SecurityDB1;
+CREATE TABLE Users (
+    user_id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(100),
+    password_encrypted VARBINARY(255),
+    secret_key VARCHAR(50)
+);
+USE SecurityDB2;
+
+CREATE TABLE Messages (
+    msg_id INT AUTO_INCREMENT PRIMARY KEY,
+    original_message VARCHAR(255),
+    encrypted_message VARBINARY(255),
+    decrypted_message VARCHAR(255),
+    hash_value VARCHAR(255),
+    base64_encoded TEXT
+);
+USE SecurityDB1;
+
+INSERT INTO Users
+(username, password_encrypted, secret_key)
+VALUES (
+    'Allen',
+    AES_ENCRYPT('mySecretPass123', 'encryption_key_123'),
+    'encryption_key_123'
+);
+
+SELECT user_id, username,
+HEX(password_encrypted) AS Encrypted_Password
+FROM Users;
+SELECT username,
+AES_DECRYPT(password_encrypted, secret_key)
+AS Decrypted_Password
+FROM Users;
+USE SecurityDB2;
+
+INSERT INTO Messages
+(original_message, encrypted_message,
+decrypted_message, hash_value, base64_encoded)
+VALUES (
+    'Secret Message',
+    AES_ENCRYPT('Secret Message', 'key123'),
+    AES_DECRYPT(
+        AES_ENCRYPT('Secret Message', 'key123'),
+        'key123'
+    ),
+    SHA2('Secret Message', 256),
+    TO_BASE64('Secret Message')
+);
+SELECT msg_id,
+       original_message,
+       HEX(encrypted_message) AS Encrypted_Hex,
+       decrypted_message,
+       hash_value,
+       base64_encoded,
+       FROM_BASE64(base64_encoded) AS Base64_Decoded
+FROM Messages;
+SELECT MD5('Secret Message') AS MD5_Hash;
+SELECT SHA2('Secret Message', 512) AS SHA512_Hash;
+SELECT
+TO_BASE64('Confidential Data') AS Encoded,
+FROM_BASE64(
+    TO_BASE64('Confidential Data')
+) AS Decoded;
+1. Encrypted Users Table
++---------+----------+----------------------------------+
+| user_id | username | Encrypted_Password               |
++---------+----------+----------------------------------+
+| 1       | Allen    | 18239F770FC516B8072F489A2AC391D4 |
++---------+----------+----------------------------------+
+
+
+2. Decrypted Password
++----------+----------------------------------+
+| username | Decrypted_Password               |
++----------+----------------------------------+
+| Allen    | 0x6D7953656372657450617373313233 |
++----------+----------------------------------+
+
+
+3. Messages Table
++--------+------------------+-------------------+
+| msg_id | original_message | decrypted_message |
++--------+------------------+-------------------+
+| 1      | Secret Message   | Secret Message    |
++--------+------------------+-------------------+
+
+
+4. MD5 Hashing
++----------------------------------+
+| MD5_Hash                         |
++----------------------------------+
+| 54b0581b96c2e04197a9f4f50f1e64da |
++----------------------------------+
+
+
+5. SHA2 Hashing
+SHA512_Hash:
+
+0c36e2f06209dd15596988e2269397f4e6272f08b792ed6bf7ae3196fe766d65d047
+4264c6da2614f27f3be3671ad32bc5e5b656a73d984316e59c49eed07ba8
+
+
+6. Encoding and Decoding
++--------------------------+--------------------------------------+
+| Encoded                  | Decoded                              |
++--------------------------+--------------------------------------+
+| Q29uZmlkZW50aWFsIERhdGE= | 0x436F6E666964656E7469616C2044617461 |
++--------------------------+--------------------------------------+
