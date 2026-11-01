@@ -1,0 +1,151 @@
+CREATE DATABASE CollegeDB;
+USE CollegeDB;
+
+-- Create Departments Table
+CREATE TABLE Departments (
+    DeptID INT PRIMARY KEY,
+    DeptName VARCHAR(100),
+    StudentCount INT,
+    TeacherCount INT,
+    Classrooms INT,
+    Email VARCHAR(100)
+);
+
+-- Begin Transaction
+START TRANSACTION;
+
+-- Insert Records
+INSERT INTO Departments VALUES
+(1, 'Computer Science', 200, 15, 5, 'cs@college.edu');
+
+SAVEPOINT sp1;
+
+INSERT INTO Departments VALUES
+(2, 'Information Technology', 180, 12, 4, 'it@college.edu');
+
+SAVEPOINT sp2;
+
+INSERT INTO Departments VALUES
+(3, 'Cyber Security', 150, 10, 6, 'cyber@college.edu');
+
+SAVEPOINT sp3;
+
+INSERT INTO Departments VALUES
+(4, 'Electronics', 150, 10, 6, 'ece@college.edu');
+
+-- View All Records
+SELECT * FROM Departments;
+
+-- Update Records
+UPDATE Departments
+SET StudentCount = 220
+WHERE DeptID = 1;
+
+UPDATE Departments
+SET StudentCount = 190
+WHERE DeptID = 2;
+
+SAVEPOINT sp4;
+
+-- Rollback to Savepoint
+ROLLBACK TO sp2;
+
+-- View After Rollback
+SELECT * FROM Departments;
+
+-- Insert New Record
+INSERT INTO Departments VALUES
+(5, 'Mechanical', 160, 11, 7, 'mech@college.edu');
+
+-- Delete Record
+DELETE FROM Departments
+WHERE DeptID = 2;
+
+-- Commit Transaction
+COMMIT;
+
+-- Create New User
+CREATE USER 'dept_user'@'localhost'
+IDENTIFIED BY 'pass123';
+
+-- Grant Privileges
+GRANT SELECT, INSERT
+ON CollegeDB.Departments
+TO 'dept_user'@'localhost';
+
+-- Switch user in command line:
+-- mysql -u dept_user -p
+
+USE CollegeDB;
+SELECT * FROM Departments;
+
+INSERT INTO Departments VALUES
+(6, 'Artificial Intelligence', 140, 9, 4, 'ai@college.edu');
+
+DELETE FROM Departments
+WHERE DeptID = 1;
+
+-- Grant Additional Privileges
+GRANT DELETE, UPDATE
+ON CollegeDB.Departments
+TO 'dept_user'@'localhost';
+
+-- Revoke Permissions
+REVOKE DELETE, INSERT, UPDATE
+ON CollegeDB.Departments
+FROM 'dept_user'@'localhost';
+
+-- Drop User
+DROP USER 'dept_user'@'localhost';
+
+
+1. View All Records
+DeptID	DeptName	StudentCount	TeacherCount	Classrooms	Email
+1	Computer Science	200	15	5	cs@college.edu
+2	Information Technology	180	12	4	it@college.edu
+3	Cyber Security	150	10	6	cyber@college.edu
+4	Electronics	150	10	6	ece@college.edu
+
+4 rows in set
+
+2. After Rollback
+DeptID	DeptName	StudentCount	TeacherCount	Classrooms	Email
+1	Computer Science	200	15	5	cs@college.edu
+2	Information Technology	180	12	4	it@college.edu
+
+2 rows in set
+
+3. Create New User
+Query OK, 0 rows affected
+
+
+4. Grant Privileges
+Query OK, 0 rows affected
+
+
+5. View Records as dept_user
+DeptID	DeptName	StudentCount	TeacherCount	Classrooms	Email
+1	Computer Science	200	15	5	cs@college.edu
+5	Mechanical	160	11	7	mech@college.edu
+
+2 rows in set
+
+6. Insert New Record
+Query OK, 1 row affected
+
+
+7. Delete Without Permission
+ERROR 1142 (42000):
+DELETE command denied to user 'dept_user'@'localhost'
+
+
+8. Grant Additional Privileges
+Query OK, 0 rows affected
+
+
+9. Revoke Permissions
+Query OK, 0 rows affected
+
+
+10. Drop User
+Query OK, 0 rows affected
