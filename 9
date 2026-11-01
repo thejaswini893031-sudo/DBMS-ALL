@@ -1,0 +1,59 @@
+1. Open the authorized SQL Injection testing lab.
+
+2. Identify the DBMS used by the test application.
+
+3. Find the available database names.
+
+4. Identify the tables present in the selected database.
+
+5. Identify the column names in the users table.
+
+6. Observe the authentication process and check whether
+   the application is vulnerable to SQL Injection.
+
+7. Record the test results without accessing or extracting
+   passwords or credit card details.
+
+8. Verify that the application handles invalid input safely.
+
+1. Available Databases
+available databases [2]:
+
+acuart
+information_schema
+
+
+2. Available Tables
+Database: acuart
+
+[8 tables]
+
+artists
+carts
+categ
+featured
+guestbook
+pictures
+products
+users
+
+
+3. Users Table – Column Names
+Database: acuart
+Table: users
+
+[8 columns]
+
+name
+address
+cart
+cc
+email
+pass
+phone
+uname
+
+
+4. Security Observation
+
+The manual demonstrates that sensitive authentication and payment-related fields may be exposed when a website is vulnerable to SQL injection. The actual values are intentionally not reproduced here.
